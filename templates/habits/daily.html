@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Habits — COMPASS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Today's Habits</h1>
+    <p>{{ today|date:"l, M d, Y" }}</p>
+</div>
+
+<div style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center;">
+    <a href="{% url 'habits:manage' %}" class="btn btn-secondary">Manage habits</a>
+    {% if habit_data %}
+    {% with done_count=habit_data|length %}
+    <span style="font-size:0.85rem; color:var(--text-light);">
+        {% for item in habit_data %}{% if item.log.done %}✓{% endif %}{% endfor %}
+        {{ habit_data|length }} habits tracked today
+    </span>
+    {% endwith %}
+    {% endif %}
+</div>
+
+{% if habit_data %}
+<div class="card" style="padding: 0;">
+    {% for item in habit_data %}
+    <div class="checkbox-item {% if item.log.done %}completed{% endif %}" style="padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 14px; flex: 1;">
+            <form method="post" action="{% url 'habits:toggle' item.habit.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <input type="checkbox" {% if item.log.done %}checked{% endif %} onchange="this.form.submit()"
+                    id="habit-{{ item.habit.pk }}">
+            </form>
+            <label for="habit-{{ item.habit.pk }}" style="margin: 0; cursor: pointer;">{{ item.habit.name }}</label>
+        </div>
+        {% if item.streak > 0 %}
+        <span style="background: var(--primary); color: white; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap;">
+            🔥 {{ item.streak }} day streak
+        </span>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">○</div>
+        <p>No active habits yet.<br><a href="{% url 'habits:create' %}">Add your first habit</a></p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

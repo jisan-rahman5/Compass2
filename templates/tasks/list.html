@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Tasks — COMPASS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Tasks</h1>
+</div>
+
+<div class="date-nav">
+    <a href="?date={{ prev_date|date:'Y-m-d' }}">← Prev</a>
+    <span class="current-date">
+        {{ view_date|date:"l, M d, Y" }}
+        {% if view_date == today %}
+        <span style="color:var(--primary); font-size:0.8rem; font-weight:400;">(today)</span>
+        {% endif %}
+    </span>
+    <a href="?date={{ next_date|date:'Y-m-d' }}">Next →</a>
+    {% if view_date != today %}
+    <a href="?date={{ today|date:'Y-m-d' }}" class="btn btn-sm btn-secondary">Today</a>
+    {% endif %}
+</div>
+
+{% if not is_future %}
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'tasks:create' %}?date={{ view_date|date:'Y-m-d' }}" class="btn btn-primary">+ Add task</a>
+</div>
+{% endif %}
+
+{% if is_future %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">🔒</div>
+        <p>Future days are read-only.<br>Tasks can only be managed for today and past dates.</p>
+    </div>
+</div>
+{% elif tasks %}
+<div class="card" style="padding: 0;">
+    {% for task in tasks %}
+    <div class="checkbox-item {% if task.completed %}completed{% endif %}" style="padding: 14px 22px;">
+        <form method="post" action="{% url 'tasks:toggle' task.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="checkbox" {% if task.completed %}checked{% endif %} onchange="this.form.submit()"
+                id="task-{{ task.pk }}">
+        </form>
+        <label for="task-{{ task.pk }}" style="flex:1; {% if not task.completed and view_date < today %}color: #c75943;{% endif %}">
+            {{ task.title }}
+            {% if not task.completed and view_date < today %}
+            <span style="font-size: 0.72rem; font-weight: 600; background: #fde8e3; color: #c75943; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">Overdue</span>
+            {% endif %}
+        </label>
+        <span class="badge badge-{{ task.priority }}">{{ task.get_priority_display }}</span>
+        <div class="btn-group" style="margin-left: 8px;">
+            <a href="{% url 'tasks:edit' task.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+            <form method="post" action="{% url 'tasks:delete' task.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">☁️</div>
+        <p>No tasks for this day. Enjoy the calm.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

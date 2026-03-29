@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% block title %}COMPASS{% endblock %}
+
+{% block content %}
+<div class="dash-container">
+
+    <!-- Top Header mimicking mockup -->
+    <div class="header-top">
+        <div class="page-header" style="margin-bottom: 0;">
+            <h1>Overview</h1>
+            <p>Good morning, {{ user.first_name|default:user.username }}—here's your day at a glance.</p>
+        </div>
+        <div class="header-actions">
+            <div class="date-pill">{{ today|date:"l, j F Y" }}</div>
+            <button class="icon-btn" title="Notifications">⚲</button>
+            <button class="icon-btn" title="Search">⚲</button>
+        </div>
+    </div>
+
+    <!-- Year Progress Header (Massive 3 Card Spread) -->
+    <div class="card" style="margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items:flex-end; border-bottom: 1px solid var(--border-light); padding-bottom: 24px; margin-bottom: 24px;">
+            <div style="flex: 1;">
+                <div style="font-size: 0.75rem; color: var(--text-light); font-weight: 600; letter-spacing: 1px; margin-bottom: 16px;">YEAR PROGRESS &mdash; {{ today|date:"Y" }}</div>
+                <div style="display: flex; align-items: baseline;">
+                    <span style="font-size: 1.2rem; margin-right: 4px; color: var(--text-light); font-family: 'Playfair Display', serif;">%</span>
+                    <span style="font-size: 3.5rem; font-weight: 700; color: var(--text); line-height: 1; font-family: 'Playfair Display', serif;">{{ pct_complete }}</span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; margin-top: 8px; font-weight: 600; letter-spacing: 0.5px;">YEAR COMPLETED</div>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 4px;">On track for your goals</div>
+            </div>
+
+            <div style="flex: 1; text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 700; color: var(--text); font-family: 'Playfair Display', serif; line-height: 1;">{{ day_of_year }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; margin-top: 8px; font-weight: 600; letter-spacing: 0.5px;">DAYS ELAPSED</div>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 4px;">Since Jan 1</div>
+            </div>
+
+            <div style="flex: 1; text-align: right;">
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 20px;">{{ days_left_month }} days left in {{ today|date:"F" }}</div>
+                <div style="font-size: 2.5rem; font-weight: 700; color: var(--text); font-family: 'Playfair Display', serif; line-height: 1;">{{ days_left }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; margin-top: 8px; font-weight: 600; letter-spacing: 0.5px;">DAYS REMAINING</div>
+                <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 4px;">Until Dec 31</div>
+            </div>
+        </div>
+
+        <!-- CSS Timeline Bar -->
+        <div style="position: relative; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-light); margin-bottom: 8px; font-weight: 500;">
+                <span>Jan 1</span>
+                <span style="color: var(--primary); font-weight: 600;">Today &mdash; {{ pct_complete }}%</span>
+                <span>Dec 31</span>
+            </div>
+            <div style="background: var(--bg-input); height: 8px; border-radius: 4px; overflow: hidden; position: relative; border: 1px solid var(--border-light);">
+                <div style="background: var(--primary-light); width: {{ pct_complete }}%; height: 100%; border-radius: 4px; position: absolute; left: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);"></div>
+                <div style="background: var(--primary); width: 8px; height: 100%; border-radius: 4px; position: absolute; left: {{ pct_complete }}%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-light); margin-top: 6px;">
+                <span>Q1</span>
+                <span>Q2</span>
+                <span>Q3</span>
+                <span>Q4</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3-Column Grid Layout (Mockup Style) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 24px; align-items: start;">
+
+        <!-- Finance Column -->
+        <div class="dash-card">
+            <div class="card-header">
+                <div style="display: flex; flex-direction: column;">
+                    <h2 style="font-size: 0.8rem; font-weight: 600; color: var(--text-light); letter-spacing: 1px;">THIS MONTH</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">{{ month_name }} {{ year }} &middot; {{ days_left_month }} days left</p>
+                </div>
+                <a href="{% url 'finance:expense_add' %}" class="btn-add-square" title="Log expense">+</a>
+            </div>
+
+            <div style="background: var(--bg-input); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; color: var(--text-light); margin-bottom: 24px; display: inline-flex; align-items: center; gap: 6px;">
+                <span style="width: 6px; height: 6px; background: var(--primary); border-radius: 50%; display: inline-block;"></span>
+                {{ month_name }} {{ year }} &middot; Active
+            </div>
+
+            <div class="finance-detail-list" style="border-top: none; padding-top: 0;">
+                <!-- Income -->
+                <div class="finance-detail-item" style="margin-bottom: 12px;">
+                    <div class="detail-label">
+                        <div class="detail-dot" style="background: var(--dot-green);"></div>
+                        <span class="detail-name">Income</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-weight: 700; color: var(--text); font-size: 0.95rem;">${{ total_income|floatformat:0 }}</span>
+                    </div>
+                </div>
+
+                <!-- Expense -->
+                <div class="finance-detail-item" style="margin-bottom: 12px;">
+                    <div class="detail-label">
+                        <div class="detail-dot" style="background: var(--warning);"></div>
+                        <span class="detail-name">Expense</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-weight: 700; color: var(--text); font-size: 0.95rem;">${{ total_expense|floatformat:0 }}</span>
+                    </div>
+                </div>
+
+                <!-- Savings -->
+                <div class="finance-detail-item" style="margin-bottom: 16px;">
+                    <div class="detail-label">
+                        <div class="detail-dot" style="background: var(--accent);"></div>
+                        <span class="detail-name">Savings</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-weight: 700; color: var(--text); font-size: 0.95rem;">${{ savings|floatformat:0 }}</span>
+                    </div>
+                </div>
+
+                <!-- Minimal Bar Chart -->
+                <div style="height: 6px; border-radius: 3px; background: var(--dot-grey); display: flex; overflow: hidden;">
+                    <div style="background: var(--dot-green); width: {{ income_pct }}%;"></div>
+                    <div style="background: var(--warning); width: {{ expense_pct }}%;"></div>
+                    <div style="background: var(--accent); width: {{ savings_pct }}%;"></div>
+                </div>
+                <div style="display: flex; gap: 12px; font-size: 0.7rem; color: var(--text-light); margin-top: 6px;">
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--dot-green);"></span> Income</span>
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--warning);"></span> Expense</span>
+                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width:4px;height:4px;border-radius:50%;background:var(--accent);"></span> Savings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks Column -->
+        <div class="dash-card">
+            <div class="card-header">
+                <div style="display: flex; flex-direction: column;">
+                    <h2 style="font-size: 0.8rem; font-weight: 600; color: var(--text-light); letter-spacing: 1px;">TODAY'S FOCUS</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">{{ today|date:"l" }} &middot; {{ todays_tasks|length }} items</p>
+                </div>
+                <a href="{% url 'tasks:create' %}" class="btn-add-square" title="Add item">+</a>
+            </div>
+
+            {% if todays_tasks %}
+            <div class="task-list-clean">
+                {% for task in todays_tasks %}
+                <div class="clean-item" style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-light);">
+                    <form method="post" action="{% url 'tasks:toggle' task.pk %}" style="display:flex; margin-top:2px;">
+                        {% csrf_token %}
+                        <input type="checkbox" {% if task.completed %}checked{% endif %} onchange="this.form.submit()" class="clean-check">
+                    </form>
+                    <div style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.9rem; color: {% if task.completed %}var(--text-light); text-decoration: line-through;{% else %}var(--text);{% endif %}">{{ task.title }}</span>
+                        {% if task.completed %}
+                            <span class="badge" style="background:#e8ece9; color:var(--text-light); font-size:0.65rem;">Done</span>
+                        {% else %}
+                            <span class="badge" style="background:#fde8e3; color:#c75943; font-size:0.65rem;">{{ task.get_priority_display }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="dash-empty" style="padding: 20px 0;">
+                <p>Nothing planned.</p>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'tasks:create' %}" class="btn-ghost-add" style="margin-top: 16px;">+ Add focus item</a>
+        </div>
+
+        <!-- Habits Column -->
+        <div class="dash-card">
+            <div class="card-header">
+                <div style="display: flex; flex-direction: column;">
+                    <h2 style="font-size: 0.8rem; font-weight: 600; color: var(--text-light); letter-spacing: 1px;">DAILY ANCHORS</h2>
+                    <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 2px;">Habits to keep you grounded</p>
+                </div>
+                <a href="{% url 'habits:create' %}" class="btn-add-square" title="Add anchor">+</a>
+            </div>
+
+            {% if todays_habits %}
+            <div class="habit-list-clean">
+                {% for habit in todays_habits %}
+                <div class="clean-item" style="display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border-light);">
+                    
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--bg-input); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-size:1rem;">
+                        <!-- Minimal icon placeholder -->
+                        ⚲
+                    </div>
+                    
+                    <div style="flex: 1; display:flex; flex-direction: column;">
+                        <span style="font-size: 0.95rem; font-weight: 500; color: var(--text);">{{ habit.name }}</span>
+                        <!-- Mock time block, visually pleasing -->
+                        <span style="font-size: 0.75rem; color: var(--text-light);">Daily</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <form method="post" action="{% url 'habits:toggle' habit.pk %}" style="display:flex;">
+                            {% csrf_token %}
+                            <input type="checkbox" {% if habit.completed %}checked{% endif %} onchange="this.form.submit()" class="clean-check" title="Mark complete">
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="dash-empty" style="padding: 20px 0;">
+                <p>No anchors set.</p>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'habits:create' %}" class="btn-ghost-add" style="margin-top: auto;">+ Add anchor</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

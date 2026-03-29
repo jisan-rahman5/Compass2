@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Server Error (500) — COMPASS{% endblock %}
+
+{% block content %}
+<div class="empty-state" style="margin-top: 10vh;">
+    <div class="empty-icon" style="font-size: 3rem; margin-bottom: 20px;">⚠️</div>
+    <h1 style="font-size: 1.5rem; color: var(--text); margin-bottom: 10px;">Server Error</h1>
+    <p style="color: var(--text-light); margin-bottom: 30px;">The compass is temporarily spinning. Please try again
+        later.</p>
+    <a href="{% url 'dashboard:index' %}" class="btn btn-primary">Return to Dashboard</a>
+</div>
+{% endblock %}

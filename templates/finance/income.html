@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}{% if editing %}Edit{% else %}Manage{% endif %} Income — COMPASS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% if editing %}Edit{% else %}Manage{% endif %} Income</h1>
+</div>
+
+<div class="card" style="max-width: 500px; margin-bottom: 24px;">
+    <div class="card-title">{% if editing %}Edit{% else %}Add{% endif %} Income</div>
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Add{% endif %} Income</button>
+            {% if editing %}
+            <a href="{% url 'finance:income' %}" class="btn btn-secondary">Cancel</a>
+            {% else %}
+            <a href="{% url 'finance:overview' %}" class="btn btn-secondary">← Back</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+{% if not editing and incomes %}
+<div class="card" style="padding:0;">
+    <table>
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Amount</th>
+                <th>Month</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inc in incomes %}
+            <tr>
+                <td>{{ inc.source }}</td>
+                <td>${{ inc.amount|floatformat:2 }}</td>
+                <td>{{ inc.month }}/{{ inc.year }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'finance:income_edit' inc.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+                        <form method="post" action="{% url 'finance:income_delete' inc.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Del</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Create Account — COMPASS{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="auth-brand">
+        <span class="brand-icon">🧭</span>
+        <h1>COMPASS</h1>
+        <p>Join your daily direction system</p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" class="form-control" placeholder="Choose a username"
+                required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="id_email">Email</label>
+            <input type="email" name="email" id="id_email" class="form-control" placeholder="Your email address"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password" class="form-control" placeholder="Create a password"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_confirm_password">Confirm Password</label>
+            <input type="password" name="confirm_password" id="id_confirm_password" class="form-control" placeholder="Repeat your password"
+                required>
+        </div>
+
+        {% if form.errors %}
+        <div class="message message-error" style="margin-bottom:14px;">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    {{ field.label }}: {{ error }}<br>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Create Account</button>
+    </form>
+
+    <div class="auth-footer">
+        Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+[
+  {
+    "file": ".\\templates\\dashboard\\index.html",
+    "lines": 325
+  },
+  {
+    "file": ".\\dashboard\\views.py",
+    "lines": 271
+  },
+  {
+    "file": ".\\finance\\views.py",
+    "lines": 237
+  },
+  {
+    "file": ".\\templates\\finance\\overview.html",
+    "lines": 175
+  },
+  {
+    "file": ".\\progress\\views.py",
+    "lines": 126
+  },
+  {
+    "file": ".\\tasks\\views.py",
+    "lines": 121
+  },
+  {
+    "file": ".\\habits\\views.py",
+    "lines": 96
+  },
+  {
+    "file": ".\\compass\\settings.py",
+    "lines": 90
+  },
+  {
+    "file": ".\\finance\\forms.py",
+    "lines": 85
+  },
+  {
+    "file": ".\\resolutions\\views.py",
+    "lines": 79
+  },
+  {
+    "file": ".\\templates\\finance\\income.html",
+    "lines": 67
+  },
+  {
+    "file": ".\\templates\\tasks\\list.html",
+    "lines": 67
+  },
+  {
+    "file": ".\\templates\\base.html",
+    "lines": 61
+  },
+  {
+    "file": ".\\templates\\habits\\manage.html",
+    "lines": 61
+  },
+  {
+    "file": ".\\finance\\models.py",
+    "lines": 60
+  }
+]

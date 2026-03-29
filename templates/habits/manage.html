@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Manage Habits — COMPASS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Manage Habits</h1>
+</div>
+
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'habits:create' %}" class="btn btn-primary">+ Add habit</a>
+    <a href="{% url 'habits:daily' %}" class="btn btn-secondary" style="margin-left:8px;">← Back to daily</a>
+</div>
+
+{% if habits %}
+<div class="card" style="padding:0;">
+    <table>
+        <thead>
+            <tr>
+                <th>Habit</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for habit in habits %}
+            <tr>
+                <td>{{ habit.name }}</td>
+                <td>
+                    {% if habit.active %}
+                    <span class="badge badge-success">Active</span>
+                    {% else %}
+                    <span class="badge badge-warning">Inactive</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a href="{% url 'habits:edit' habit.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+                        <form method="post" action="{% url 'habits:toggle_active' habit.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            {% if habit.active %}
+                            <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-sm btn-primary">Activate</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <div class="empty-state">
+        <div class="empty-icon">○</div>
+        <p>No habits created yet.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
