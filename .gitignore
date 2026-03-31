@@ -17,7 +17,7 @@ db.sqlite3
 *.log
 local_settings.py
 
-# Static & Media (collected)
+# Static (collected)
 /static/collected/
 
 # Environment Variables
@@ -25,7 +25,6 @@ local_settings.py
 .env.*
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo

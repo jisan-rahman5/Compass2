@@ -2,7 +2,6 @@
 Django settings for COMPASS project.
 """
 
-import sqlite3
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +10,7 @@ SECRET_KEY = 'django-insecure-compass-dev-key-change-in-production'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,27 +57,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'compass.wsgi.application'
 
-
-def _select_sqlite_database():
-    # Prefer the main database file, but fall back to a recovered copy if
-    # Windows/OneDrive leaves the original file in an unreadable I/O state.
-    for name in ('db.sqlite3', 'db_recovered.sqlite3', 'db.sqlite3.backup'):
-        candidate = BASE_DIR / name
-        if not candidate.exists():
-            continue
-        try:
-            conn = sqlite3.connect(candidate)
-            conn.execute('PRAGMA schema_version;').fetchone()
-            conn.close()
-            return candidate
-        except sqlite3.Error:
-            continue
-    return BASE_DIR / 'db.sqlite3'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': _select_sqlite_database(),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -102,4 +84,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
-# Trigger reload
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -1,70 +1,56 @@
-# COMPASS — Personal Productivity System
+# COMPASS
 
-> **C**ommit · **O**rganise · **M**anage · **P**lan · **A**nalyse · **S**tay-focused · **S**ucceed
-
-COMPASS is a personal productivity web application built as a Final Year Project (FYP). It helps individuals manage their daily tasks, track habits, and monitor their personal finances — all in one clean, minimal dashboard.
+**COMPASS** is a personal productivity web application built with Django.  
+It helps students manage their daily habits, tasks, and finances in one place.
 
 ---
 
 ## Features
 
-| Module     | Capabilities |
-|------------|-------------|
-| **Dashboard** | Year-progress tracker, daily task overview, habit anchors, monthly finance summary |
-| **Tasks** | Daily task planner with priorities (High / Medium / Low), date navigation, soft-delete |
-| **Habits** | Daily habit checklist with streak tracking, activate/deactivate habits |
-| **Finance** | Monthly income & expense tracker, savings calculator, category breakdown, CSV export |
-| **Accounts** | User registration, login, logout, password reset |
+- 📋 **Tasks** — Create, manage, and track to-do items
+- ✅ **Habits** — Build daily habits with streak tracking
+- 💰 **Finance** — Log income and expenses, view spending overview
+- 📊 **Dashboard** — Unified view of all productivity data
+- 🔐 **Accounts** — Register, login, and password reset
 
 ---
 
-## Tech Stack
+## Requirements
 
-- **Backend:** Python 3.x, Django 4.2
-- **Database:** SQLite (development)
-- **Frontend:** Vanilla HTML, CSS (no external CSS framework)
-- **Fonts:** DM Sans, Playfair Display (Google Fonts)
-- **Charts:** Chart.js (CDN)
+- Python 3.10+
+- Django 4.2+
 
 ---
 
-## Local Setup
+## Setup & Run
 
-### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd compass-2
-```
-
-### 2. Create a virtual environment
-```bash
+# 1. Create and activate virtual environment
 python -m venv .venv
-.venv\Scripts\activate   # Windows
-# or
-source .venv/bin/activate  # macOS/Linux
-```
+.venv\Scripts\activate        # Windows
+# source .venv/bin/activate   # macOS/Linux
 
-### 3. Install dependencies
-```bash
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-### 4. Apply database migrations
-```bash
+# 3. Apply database migrations
 python manage.py migrate
-```
 
-### 5. Create a superuser (optional, for admin panel)
-```bash
+# 4. Create a superuser (optional, for admin panel)
 python manage.py createsuperuser
-```
 
-### 6. Run the development server
-```bash
+# 5. Run the development server
 python manage.py runserver
 ```
 
-The app will be available at **http://127.0.0.1:8000/**
+Then open **http://127.0.0.1:8000** in your browser.
+
+---
+
+## Running in VS Code
+
+Open the project folder in VS Code, select the `.venv` Python interpreter,  
+then press **F5** to launch the Django server using the built-in debugger.
 
 ---
 
@@ -72,27 +58,14 @@ The app will be available at **http://127.0.0.1:8000/**
 
 ```
 compass-2/
-├── accounts/          # User auth (login, register, password reset)
-├── compass/           # Django settings & root URL config
-├── dashboard/         # Main overview screen
-├── finance/           # Income & expense tracking
-├── habits/            # Daily habit tracker with streak counters
-├── tasks/             # Date-based task planner
-├── templates/         # All HTML templates
-├── static/            # CSS & static assets
-└── manage.py
+├── compass/          # Project settings & URL config
+├── accounts/         # Auth: login, register, password reset
+├── dashboard/        # Main dashboard view
+├── habits/           # Habit tracking
+├── tasks/            # Task management
+├── finance/          # Income & expense tracking
+├── templates/        # HTML templates
+├── static/           # CSS & JS assets
+├── manage.py
+└── requirements.txt
 ```
-
----
-
-## Running Tests
-
-```bash
-python manage.py test
-```
-
----
-
-## License
-
-This project was developed as a Final Year Project (FYP). All rights reserved.

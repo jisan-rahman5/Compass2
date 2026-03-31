@@ -10,6 +10,12 @@ class ExpenseForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Apply the style.css form-control class to all fields automatically
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
 
 class IncomeForm(forms.ModelForm):
     MONTH_CHOICES = [
@@ -24,3 +30,8 @@ class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
         fields = ['amount', 'source', 'month', 'year']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
