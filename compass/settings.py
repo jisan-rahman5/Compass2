@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-compass-dev-key-change-in-production'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['compass2.onrender.com', 'localhost', '127.0.0.1']
 
