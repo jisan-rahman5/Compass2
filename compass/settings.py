@@ -12,6 +12,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['compass2.onrender.com', 'localhost', '127.0.0.1']
 
+# This tells Django to trust the domain for form submissions (CSRF)
+CSRF_TRUSTED_ORIGINS = ['https://compass2.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
